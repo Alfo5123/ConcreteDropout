@@ -40,5 +40,5 @@ Repositories:
 
 ## License
 
-Code: [MIT License](https://github.com/Alfo5123/Tunnel/blob/master/LICENSE)
+Code: [MIT License](https://github.com/Alfo5123/ConcreteDropout/blob/master/LICENSE)
 
