@@ -34,6 +34,7 @@ Papers:
 - [Categorical Reparameterization with Gumbel-Softmax](https://arxiv.org/pdf/1611.01144.pdf)
 - [Variational Dropout and the Local Reparameterization Trick](https://arxiv.org/pdf/1506.02557.pdf)
 - [The Concrete Distribution: A Continuous Relaxation of Discrete Random Variables](https://arxiv.org/pdf/1611.00712.pdf)
+
 Repositories:
 - **[Main Author Implementation](https://github.com/yaringal/ConcreteDropout)**
 
