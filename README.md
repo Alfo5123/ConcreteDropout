@@ -37,6 +37,7 @@ Papers:
 
 Repositories:
 - **[Main Author Implementation](https://github.com/yaringal/ConcreteDropout)**
+- [Variational Dropout](https://github.com/j-min/Dropouts)
 
 Blogs: 
 - [The Gumbel-Softmax Trick for Inference of Discrete Variables](https://casmls.github.io/general/2017/02/01/GumbelSoftmax.html)
