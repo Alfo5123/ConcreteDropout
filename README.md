@@ -11,7 +11,17 @@ Bayesian Methods for Machine Learing Course Project Skoltech 2018
 
 ## Description 
 
-We replicate the results of the recent paper *Concrete Droput* by Gal et al. and extend the results to new experiments.  
+We replicate the results of the recent paper *Concrete Droput* by Gal et al. and extend the results to new experiments.
+
+### Basic:
+- Understand and discuss model implementation
+- Reproduce experiments on: MNIST, Computer vision task and Reinforcement Learning
+
+
+### Extensions:
+- Try different RL environments 
+- Evaluate the algorithm performance for NLP tasks
+- Implement the Concrete Droupout for Recurrent Layers
 
 ## Authors
 
