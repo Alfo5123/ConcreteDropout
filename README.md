@@ -52,6 +52,8 @@ Repositories:
 Blogs: 
 - [The Gumbel-Softmax Trick for Inference of Discrete Variables](https://casmls.github.io/general/2017/02/01/GumbelSoftmax.html)
 - [Reparametrization Trick](https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html)
+- [A review of Dropout as applied to RNNs](https://medium.com/@bingobee01/a-review-of-dropout-as-applied-to-rnns-72e79ecd5b7b)
+- [ Dropout in Recurrent Networks — Part 1](https://becominghuman.ai/learning-note-dropout-in-recurrent-networks-part-1-57a9c19a2307)
 
 ## License
 [MIT License](https://github.com/Alfo5123/ConcreteDropout/blob/master/LICENSE)
