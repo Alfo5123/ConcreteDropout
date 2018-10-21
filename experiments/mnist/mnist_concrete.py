@@ -42,7 +42,7 @@ class ConcreteDropout(nn.Module):
             ignored for cross-entropy loss, and used only for the eculedian loss.
     """
     def __init__(self, layer, input_shape, weight_regularizer=1e-6,
-                 dropout_regularizer=1e-5, init_min=0.1, init_max=0.1, device = 0):
+                 dropout_regularizer=1e-3, init_min=0.1, init_max=0.1, device = 0):
         super(ConcreteDropout, self).__init__()
         # Post drop out layer
         self.layer = layer
@@ -139,15 +139,30 @@ class Net(nn.Module):
                                         weight_regularizer=wr, dropout_regularizer=dr), #device = device)
                     )
 
-        self.fmean = ConcreteDropout(Linear_relu(10, D), input_shape=(batch_size,10),
-                                            weight_regularizer=wr, dropout_regularizer=dr)
-        self.flogvar = ConcreteDropout(Linear_relu(10, D), input_shape=(batch_size,10), 
-                                              weight_regularizer=wr, dropout_regularizer=dr)
+        #self.fmean = ConcreteDropout(Linear_relu(10, D), input_shape=(batch_size,10),
+        #                                    weight_regularizer=wr, dropout_regularizer=dr)
+        #self.flogvar = ConcreteDropout(Linear_relu(10, D), input_shape=(batch_size,10), 
+        #                                      weight_regularizer=wr, dropout_regularizer=dr)
 
     def forward(self, x):
         x = x.view(-1, 784)
         x = self.fc1(x)
         return x
+
+    def heteroscedastic_loss(self, true, mean, log_var):
+    	
+        precision = torch.exp(-log_var)
+        return torch.sum(precision * (true - mean)**2 + log_var)
+    
+    def regularisation_loss(self):
+
+        reg_loss = self.fc1[0].regularisation()+self.fc1[1].regularisation()+\
+        		   self.fc1[2].regularisation()+self.fc1[3].regularisation()
+
+        #reg_loss += self.forward_mean.regularisation()
+        #reg_loss += self.forward_logvar.regularisation()
+        return reg_loss
+
 
 def train(args, model, device, train_loader, optimizer, epoch):
     model.train()
@@ -155,7 +170,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
-        loss = F.cross_entropy(output, target)
+        loss = F.cross_entropy(output, target) + model.regularisation_loss()
         loss.backward()
         optimizer.step()
         if batch_idx % args.log_interval == 0:
@@ -229,7 +244,7 @@ def main():
 
     N = 60000 #MNIST train set size
     wr = 1e-2 / N
-    dr = 2. / N
+    dr = 5. / N
 
     model = Net(wr,dr,args.batch_size).to(device)
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
@@ -242,3 +257,21 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def _make_dataloaders(train_set, valid_set, test_set, train_size, valid_size, batch_size):
+    # Split training into train and validation
+    indices = torch.randperm(len(train_set))
+    train_indices = indices[:len(indices)-valid_size][:train_size or None]
+    valid_indices = indices[len(indices)-valid_size:] if valid_size else None
+
+    train_loader = torch.utils.data.DataLoader(train_set, pin_memory=True, batch_size=batch_size,
+                                               sampler=SubsetRandomSampler(train_indices))
+    test_loader = torch.utils.data.DataLoader(test_set, pin_memory=True, batch_size=batch_size)
+    if valid_size:
+        valid_loader = torch.utils.data.DataLoader(valid_set, pin_memory=True, batch_size=batch_size,
+                                                   sampler=SubsetRandomSampler(valid_indices))
+    else:
+        valid_loader = None
+
+    return train_loader, valid_loader, test_loader 
