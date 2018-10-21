@@ -27,37 +27,39 @@ def train(log_interval, model, device, train_loader, optimizer, epoch ):
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.item()))
 
-def test(model, device, test_loader, validation, validation_size):
+def test(model, device, test_loader, validation ):
     model.eval()
     test_loss = 0
     correct = 0
+    total = 0
     with torch.no_grad():
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
             output = model(data)
-            test_loss += F.cross_entropy(output, target).item() # sum up batch loss
+            test_loss += F.cross_entropy(output, target).sum().item()  # sum up batch loss
             pred = output.max(1, keepdim=True)[1] # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).sum().item()
+            total += len(data)
 
     if validation == 0 :
 
-        test_loss /= validation_size
+        test_loss /= total
         print('\nTraining set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)'.format(
-        test_loss, correct, validation_size,
-        100. * correct / validation_size)) 
+        test_loss, correct, total,
+        100. * correct / total)) 
 
     elif validation == 1 :
 
-        test_loss /= validation_size
+        test_loss /= total
         print('\nValidation set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)'.format(
-        test_loss, correct, validation_size,
-        100. * correct / validation_size)) 
+        test_loss, correct, total,
+        100. * correct / total)) 
 
     else:
-        test_loss /= len(test_loader.dataset)
+        test_loss /= total
         print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-        test_loss, correct, len(test_loader.dataset),
-        100. * correct / len(test_loader.dataset)))
+        test_loss, correct, total,
+        100. * correct / total))
 
 
     return test_loss 
@@ -74,15 +76,18 @@ def make_dataloaders(train_set, test_set, train_size, valid_size,
     # Stratified train / validation split
     labels = np.asarray(list(map(operator.itemgetter(1), train_set)))
     train_indices, valid_indices, _ , _ = train_test_split( np.arange(len(train_set)), labels, 
-                                                            test_size=valid_size, 
+                                                            train_size = train_size , test_size=valid_size, 
                                                             stratify = labels, shuffle = True  )
 
     train_indices = torch.from_numpy(train_indices)
     valid_indices = torch.from_numpy(valid_indices)
 
+
     train_loader = torch.utils.data.DataLoader(train_set, pin_memory=True, batch_size=train_batch_size,
                                                sampler=torch.utils.data.sampler.SubsetRandomSampler(train_indices))
+    
     test_loader = torch.utils.data.DataLoader(test_set, pin_memory=True, batch_size=test_batch_size)
+    
     if valid_size:
         valid_loader = torch.utils.data.DataLoader(train_set, pin_memory=True, batch_size=valid_batch_size,
                                                    sampler=torch.utils.data.sampler.SubsetRandomSampler(valid_indices))
@@ -91,9 +96,10 @@ def make_dataloaders(train_set, test_set, train_size, valid_size,
 
     return train_loader, valid_loader, test_loader 
 
-def run_experiment ( train_batch_size = 128 , test_batch_size = 1000, valid_batch_size = 1000, 
+def run_experiment ( train_batch_size = 128 , test_batch_size = 128, valid_batch_size = 128, 
                      lr = 0.01 , momentum = 0.5 , seed = 1, no_cuda = False , 
-                     epochs = 20 , train_size = 50000, validation_size = 10000, log_interval = 100 ):
+                     epochs = 20 , train_size = 50000, validation_size = 10000, test_size = 10000, 
+                     log_interval = 100 ):
 
     # Set training conditions
     torch.manual_seed(seed)
@@ -118,7 +124,7 @@ def run_experiment ( train_batch_size = 128 , test_batch_size = 1000, valid_batc
                                                                   train_batch_size, valid_batch_size, 
                                                                   test_batch_size  )
 
-    N = train_size #MNIST train set size
+    N = train_size #MNIST trainset size fraction
     wr = 1e-4 / N
     dr = 2. / N
 
@@ -129,6 +135,7 @@ def run_experiment ( train_batch_size = 128 , test_batch_size = 1000, valid_batc
     training_curve = []
     validation_curve = []
     test_curve = [] 
+    dropout_rates = []
 
     for epoch in range(1, epochs + 1):
 
@@ -136,14 +143,15 @@ def run_experiment ( train_batch_size = 128 , test_batch_size = 1000, valid_batc
         train(log_interval, model, device, train_loader, optimizer, epoch)
 
         #Testing
-        training_curve.append(test( model, device, train_loader, validation = 0, validation_size = train_size))
+        training_curve.append(test( model, device, train_loader, validation = 0 ))
 
-        validation_curve.append(test(model, device, valid_loader, validation = 1 , validation_size = validation_size))
+        validation_curve.append(test(model, device, valid_loader, validation = 1  ))
         
-        test_curve.append(test(model, device, test_loader, validation = 2, validation_size = -1) )
+        test_curve.append(test(model, device, test_loader, validation = 2 ) )
 
-    dropout_rates = np.array([module.p.cpu().data.numpy()[0] for module in model.modules() if hasattr(module, 'p')]) 
+        dropout_rates.append( np.array([module.p.cpu().data.numpy()[0] for module in model.modules() if hasattr(module, 'p')]) )
         
+    #return  dropout_rates[-1], training_curve, validation_curve, test_curve 
     return  dropout_rates, training_curve, validation_curve, test_curve 
 
 def main():
