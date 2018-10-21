@@ -44,10 +44,12 @@ Papers:
 - [Categorical Reparameterization with Gumbel-Softmax](https://arxiv.org/pdf/1611.01144.pdf)
 - [Variational Dropout and the Local Reparameterization Trick](https://arxiv.org/pdf/1506.02557.pdf)
 - [The Concrete Distribution: A Continuous Relaxation of Discrete Random Variables](https://arxiv.org/pdf/1611.00712.pdf)
+- [Improving  PILCO  with  Bayesian  Neural  Network  Dynamics  Models](http://mlg.eng.cam.ac.uk/yarin/PDFs/DeepPILCO.pdf)
 
 Repositories:
 - **[Main Author Implementation](https://github.com/yaringal/ConcreteDropout)**
 - [Variational Dropout](https://github.com/j-min/Dropouts)
+- [Probabilistic Inference for Learning Control](https://github.com/nrontsis/PILCO)
 
 Blogs: 
 - [The Gumbel-Softmax Trick for Inference of Discrete Variables](https://casmls.github.io/general/2017/02/01/GumbelSoftmax.html)
