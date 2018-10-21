@@ -30,6 +30,30 @@ We replicate the results of the recent paper *Concrete Droput* by Gal et al. and
 
 ## Results
 
+### Computer Vision - Segmentation Task 
+---
+
+![](imgs/computer_vision/time_iou_comparison.png) 
+
+<img align="center" src="imgs/computer_vision/preview_results.png">
+
+### UCI - Regression Task
+---
+
+**Wine dataset**
+![](imgs/uci/wine.png) 
+
+**Boston dataset**
+![](imgs/uci/boston.png)
+
+### MNIST - Classification Task
+---
+
+![](imgs/mnist/dropout_convergence_100.png)
+
+<div align="center">
+ <img src="imgs/mnist/dropout_fractions.png" height="400px">
+</div>
 
 ## Usage
 ```
