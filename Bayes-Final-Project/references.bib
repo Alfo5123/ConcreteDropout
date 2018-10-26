@@ -1,0 +1,175 @@
+@article{dropout,
+  author    = {Geoffrey E. Hinton and
+               Nitish Srivastava and
+               Alex Krizhevsky and
+               Ilya Sutskever and
+               Ruslan Salakhutdinov},
+  title     = {Improving neural networks by preventing co-adaptation of feature detectors},
+  journal   = {CoRR},
+  volume    = {abs/1207.0580},
+  year      = {2012},
+  url       = {http://arxiv.org/abs/1207.0580},
+  archivePrefix = {arXiv},
+  eprint    = {1207.0580},
+  timestamp = {Mon, 13 Aug 2018 16:46:10 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1207-0580},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@Article{Williams1992,
+author="Williams, Ronald J.",
+title="Simple statistical gradient-following algorithms for connectionist reinforcement learning",
+journal="Machine Learning",
+year="1992",
+month="May",
+day="01",
+volume="8",
+number="3",
+pages="229--256",
+abstract="This article presents a general class of associative reinforcement learning algorithms for connectionist networks containing stochastic units. These algorithms, called REINFORCE algorithms, are shown to make weight adjustments in a direction that lies along the gradient of expected reinforcement in both immediate-reinforcement tasks and certain limited forms of delayed-reinforcement tasks, and they do this without explicitly computing gradient estimates or even storing information from which such estimates could be computed. Specific examples of such algorithms are presented, some of which bear a close relationship to certain existing algorithms while others are novel but potentially interesting in their own right. Also given are results that show how such algorithms can be naturally integrated with backpropagation. We close with a brief discussion of a number of additional issues surrounding the use of such algorithms, including what is known about their limiting behaviors as well as further considerations that might be used to help develop similar but potentially more powerful reinforcement learning algorithms.",
+issn="1573-0565",
+doi="10.1007/BF00992696",
+url="https://doi.org/10.1007/BF00992696"
+}
+
+@inproceedings{gumbel,
+title	= {Categorical Reparameterization with Gumbel-Softmax},
+author	= {Eric Jang and Shixiang Gu and Ben Poole},
+year	= {2017},
+URL	= {https://arxiv.org/abs/1611.01144}
+}
+
+@incollection{concrete,
+title = {Concrete Dropout},
+author = {Gal, Yarin and Hron, Jiri and Kendall, Alex},
+booktitle = {Advances in Neural Information Processing Systems 30},
+editor = {I. Guyon and U. V. Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett},
+pages = {3581--3590},
+year = {2017},
+publisher = {Curran Associates, Inc.},
+url = {http://papers.nips.cc/paper/6949-concrete-dropout.pdf}
+}
+
+@incollection{welling,
+title = {Variational Dropout and the Local Reparameterization Trick},
+author = {Kingma, Diederik P and Salimans, Tim and Welling, Max},
+booktitle = {Advances in Neural Information Processing Systems 28},
+editor = {C. Cortes and N. D. Lawrence and D. D. Lee and M. Sugiyama and R. Garnett},
+pages = {2575--2583},
+year = {2015},
+publisher = {Curran Associates, Inc.},
+url = {http://papers.nips.cc/paper/5666-variational-dropout-and-the-local-reparameterization-trick.pdf}
+}
+
+@inproceedings{uncertainty,
+ author = {Gal, Yarin and Ghahramani, Zoubin},
+ title = {Dropout As a Bayesian Approximation: Representing Model Uncertainty in Deep Learning},
+ booktitle = {Proceedings of the 33rd International Conference on International Conference on Machine Learning - Volume 48},
+ series = {ICML'16},
+ year = {2016},
+ location = {New York, NY, USA},
+ pages = {1050--1059},
+ numpages = {10},
+ url = {http://dl.acm.org/citation.cfm?id=3045390.3045502},
+ acmid = {3045502},
+ publisher = {JMLR.org},
+}
+
+@article{bconvnn,
+  author    = {Yarin Gal and
+               Zoubin Ghahramani},
+  title     = {Bayesian Convolutional Neural Networks with Bernoulli Approximate
+               Variational Inference},
+  journal   = {CoRR},
+  volume    = {abs/1506.02158},
+  year      = {2015},
+  url       = {http://arxiv.org/abs/1506.02158},
+  archivePrefix = {arXiv},
+  eprint    = {1506.02158},
+  timestamp = {Mon, 13 Aug 2018 01:00:00 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/GalG15a},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@PhdThesis{Gal2016Uncertainty,
+  title={Uncertainty in Deep Learning},
+  author={Gal, Yarin},
+  year={2016},
+  school={University of Cambridge}
+}
+
+
+@InProceedings{sparse,
+  title = 	 {Variational Dropout Sparsifies Deep Neural Networks},
+  author = 	 {Dmitry Molchanov and Arsenii Ashukha and Dmitry Vetrov},
+  booktitle = 	 {Proceedings of the 34th International Conference on Machine Learning},
+  pages = 	 {2498--2507},
+  year = 	 {2017},
+  editor = 	 {Doina Precup and Yee Whye Teh},
+  volume = 	 {70},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {International Convention Centre, Sydney, Australia},
+  month = 	 {06--11 Aug},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v70/molchanov17a/molchanov17a.pdf},
+  url = 	 {http://proceedings.mlr.press/v70/molchanov17a.html},
+  abstract = 	 {We explore a recently proposed Variational Dropout technique that provided an elegant Bayesian interpretation to Gaussian Dropout. We extend Variational Dropout to the case when dropout rates are unbounded, propose a way to reduce the variance of the gradient estimator and report first experimental results with individual dropout rates per weight. Interestingly, it leads to extremely sparse solutions both in fully-connected and convolutional layers. This effect is similar to automatic relevance determination effect in empirical Bayes but has a number of advantages. We reduce the number of parameters up to 280 times on LeNet architectures and up to 68 times on VGG-like networks with a negligible decrease of accuracy.}
+}
+
+@ARTICLE{densenet,
+    author = {Jegou, Simon and Drozdzal, Michal and Vazquez, David and Romero, Adriana and Bengio, Yoshua},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+     title = {The One Hundred Layers Tiramisu: Fully Convolutional DenseNets for Semantic Segmentation},
+   journal = {arXiv e-prints},
+    volume = {abs/1611.09326},
+      year = {2016},
+       url = {https://arxiv.org/abs/1611.09326}
+}
+
+
+@article{lstmreg,
+  author    = {Wojciech Zaremba and
+               Ilya Sutskever and
+               Oriol Vinyals},
+  title     = {Recurrent Neural Network Regularization},
+  journal   = {CoRR},
+  volume    = {abs/1409.2329},
+  year      = {2014},
+  url       = {http://arxiv.org/abs/1409.2329},
+  archivePrefix = {arXiv},
+  eprint    = {1409.2329},
+  timestamp = {Mon, 13 Aug 2018 16:47:17 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/ZarembaSV14},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@InProceedings{socher2013,
+  author    = {Socher, Richard  and  Perelygin, Alex  and  Wu, Jean  and  Chuang, Jason  and  Manning, Christopher D.  and  Ng, Andrew  and  Potts, Christopher},
+  title     = {Recursive Deep Models for Semantic Compositionality Over a Sentiment Treebank},
+  booktitle = {Proceedings of the 2013 Conference on Empirical Methods in Natural Language Processing},
+  month     = {October},
+  year      = {2013},
+  address   = {Seattle, Washington, USA},
+  publisher = {Association for Computational Linguistics},
+  pages     = {1631--1642},
+  url       = {http://www.aclweb.org/anthology/D13-1170}
+}
+
+@article{lecun-mnisthandwrittendigit-2010,
+  added-at = {2010-06-28T21:16:30.000+0200},
+  author = {LeCun, Yann and Cortes, Corinna},
+  biburl = {https://www.bibsonomy.org/bibtex/2935bad99fa1f65e03c25b315aa3c1032/mhwombat},
+  groups = {public},
+  howpublished = {http://yann.lecun.com/exdb/mnist/},
+  interhash = {21b9d0558bd66279df9452562df6e6f3},
+  intrahash = {935bad99fa1f65e03c25b315aa3c1032},
+  keywords = {MSc _checked character_recognition mnist network neural},
+  lastchecked = {2016-01-14 14:24:11},
+  timestamp = {2016-07-12T19:25:30.000+0200},
+  title = {{MNIST} handwritten digit database},
+  url = {http://yann.lecun.com/exdb/mnist/},
+  username = {mhwombat},
+  year = 2010
+}
+
+
