@@ -83,17 +83,19 @@ where $N$ is the number of data points, $S$ a random set of $M$ data points, $f^
     \mathbb{KL}\left( q_\theta(\omega) \Vert p(\omega) \right) = \sum_{l=1}^L \mathbb{KL}\left( q_{M_l} ( W_l \Vert p(W_l) \right) \propto \frac{l^2(1-p)}{2} \|M\|^2 - K \mathcal{H}(p).
 \end{equation}
 
-where $K$ is 
+where $K$ is the constant to balance the regularization term with the predictive term. The entropy term $\mathcal{H}(p)$ can be seen as the \textit{dropout regularization term}, which pushes the dropout probability towards $0.5$ which is the highest value it can attain; meanwhile the first term is considered as the \textit{weight regularization term } which limits the norm of the weights used in the concrete dropout layers. 
 
 \subsubsection{Concrete Distribution}
 
-One of the main restrictions, as previously mentioned,  relies on the evaluation of the derivative of the objective function with respected to the dropout rate $p$ for the loss optimization step.  The preferred estimator in the literature is  pathwise estimator, however we need to be able to express 
+One of the main restrictions, as previously mentioned,  relies on the evaluation of the derivative of the objective function with respected to the dropout rate $p$ for the loss optimization step.  The preferred estimator in the literature is  pathwise estimator, however we need to be able to express the random variable as a function of two parameters $\theta$ and $\epsilon$, the latter one being a random variable which does on depend on $\theta$. Unfortunately, the binary random variable does not admit such expression form. 
+
+In order to solve the above issue, the paper proposes a continuous relaxation of the binary discrete random variable by using a 
 
 \begin{equation}\label{eq3}
     \bar{z} =  \textit{sigmoid} \left( \frac{1}{t} \dot \left( \log \frac{p}{1-p}  + \log \frac{u}{1-u}    \right)  \right) 
 \end{equation}
 
-where $u\sim \text{Unif}(0,1)$ and $t$ is the temperature variable 
+where $u\sim \text{Unif}(0,1)$ and $t$ is the temperature variable which makes the distribution closer to the discrete version. 
 
 \subsection{Concrete Dropout for LSTM Layer}
 
@@ -110,8 +112,6 @@ h_t = o_t \tanh(c_t)
 \]
 
 When using dropout with LSTM, we usually put it before the layer (at least we did that in experiments). From LSTM's definition it's clear, that this is equivalent to zeroing out columns of $W_{ii}, W_{if} W_{ig}, W_{io}$. So we only induce prior for $W_{ii}, W_{if} W_{ig}, W_{io}$ and consequently, only these matrices should be used in weight regularizer of our ELBO objective. This concludes our derivation of Concrete dropout for LSTM.
-
-\paragraph{Paragraph} 
 
 
 \section{Experiments}
@@ -132,7 +132,7 @@ In our experiments, we try to replicate a pattern of converged dropout probabili
 \subsection{MNIST}
 We used the standard classification dataset MNIST \cite{lecun-mnisthandwrittendigit-2010} to assess the accuracy of Concrete dropout and it's relation with the training-set size, by applying it in a Multi-Layer Perceptron (MLP) arquitecture with $3$ hidden layers (with $512$ units) and ReLU activations.
 
-After trained for $100$ epochs, our Concrete dropout achieves MNIST accuracy of $~98\%$  matching that of hand-tuned dropout. Figure \ref{fig:mnist_frac} shows a decreasing converged dropout probabilities as the size of data increases for each one of the MLP layers. 
+After trained for $100$ epochs, our Concrete dropout achieves MNIST accuracy of $~98\%$  matching that of hand-tuned dropout. Figure \ref{fig:mnist_frac} shows a decreasing converged dropout probabilities as the size of data increases for each one of the MLP layers. Furthermore, we observe in \ref{fig:mnist_convergence} that the convergence in dropout probability in first layers was achieved in significantly less number of epochs compared to the deeper ones. In addition, it validates our intuition that shallower layers in a neural network should have smaller dropout rates. 
 
 \subsection{Computer Vision}
 
@@ -145,6 +145,8 @@ We compare Concrete dropout with grid-searched dropout rate of $0.2$ (reported i
 Figure \ref{fig:calib_ex} (a) shows calibration plots for each segmentation class. Concrete dropout with MC predictions is the closest to a diagonal. Strangely, if don't use MC for predicting, it results in worse-calibrated predictions then dropout in most cases. Figure \ref{fig:calib_ex} (b) illustrates predictions and uncertainties.
 
 \subsection{Reinforcement Learning Task}
+
+As part of the RL setting, we tested Concrete Dropout layers under two conditions: a model-based approached which learns the dynamics of the a cartpole environment and a model-free policy gradient for learning an agent to solve the simple OpenAI 'CartPole-v0' environment. We observe how using concrete dropout improves the learning curve \ref{fig:rl_cd} with respect to a fix dropout rate\ref{fig:rl_fix}. In general, we can show that the dropout rate decreases as more epochs we take to train the model, therefore reducing the epistemic uncertainty of predicting the next state or action for our models. For more implementation details, please refer to the github repository of the project. 
 
 \subsection{Natural Language Processing}
 
@@ -171,6 +173,8 @@ The results after training for $20$ epochs with Adam optimizer we obtained are s
  In this research project, we were able to validate and demonstrate how tuning the dropout rate via concrete dropout can provide us an speed up in comparison with grid-searching. One drawback of this model reflects on the need to tune hyperparameters such as weight regularizer and dropout regularizer which can dramatically affect the model predictions. Although the original paper suggests some rule of thumbs, it is still unclear how to tune the values without using a grid-search approach. We should also mention as insight, that the dropout probabilities obtained for different layers follow the general knowledge about using smaller dropout for shallow layers in a neural network. Finally, based on our reproducibility results, we can conclude that the performance of the concrete dropout layer model is comparable with the one of the model with optimal dropout probability fixed, making it much faster than grid-search with exponential number of dropout combinations. 
 
 \bibliographystyle{unsrt}
+
+\newpage
 \bibliography{references}
 
 
@@ -205,9 +209,18 @@ In this section we display all relevant plots of results referenced in the exper
 \centering
 \centering
 \includegraphics[width=0.5\linewidth]{dropout_convergence_100.png}
+\caption{Convergence of Dropout Probabilities per Layer with respect to training epochs.}
+\label{fig:mnist_convergence}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\centering
+\includegraphics[width=0.5\linewidth]{dropout_fractions.png}
 \caption{Convergence of Dropout Probabilities per Layer given different fractions of training set.}
 \label{fig:mnist_frac}
 \end{figure}
+
 
 
 \begin{figure}[!h]
@@ -239,6 +252,19 @@ In this section we display all relevant plots of results referenced in the exper
 \caption{Calibration plots for 12 classes (a) and example of segmentation and uncertainty (b).}
 \label{fig:calib_ex}
 \end{figure}
+
+ \begin{figure}[!h]
+      \centering
+      \includegraphics[scale = 0.28]{model_free_1.png}
+      \caption{Learning Curve with Concrete Dropout for CartPole environment.}
+      \label{fig:rl_cd}
+  \end{figure}
+  \begin{figure}[!h]
+      \centering
+      \includegraphics[scale = 0.35]{model_free_2.png}
+      \caption{Learning Curve with Fixed dropout (0.5) for CartPole environment.}
+      \label{fig:rl_fix}
+  \end{figure}
 
 \begin{figure}[!h]
 \centering
@@ -274,3 +300,4 @@ In this section we display all relevant plots of results referenced in the exper
 \end{figure}
 
 \end{document}
+
